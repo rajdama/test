@@ -15,11 +15,21 @@ app.use(bodyParser.json()); // Parse JSON request bodies
 const fetchData =
   typeof fetch === "function"
     ? async function fetchData(url) {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          headers: {
+            "User-Agent":
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0",
+          },
+        });
         return await response.text();
       }
     : async function fetchData(url) {
-        const { data } = await axios.get(url);
+        const { data } = await axios.get(url, {
+          headers: {
+            "User-Agent":
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0",
+          },
+        });
         return data;
       };
 
