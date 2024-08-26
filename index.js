@@ -11,7 +11,7 @@ app.use(cors()); // Enable CORS
 app.use(bodyParser.json()); // Parse JSON request bodies
 
 app.post("/", async (req, res) => {
-  let lines = await YoutubeTranscript.fetchTranscript("xw_BiogHpQI");
+  let lines = await YoutubeTranscript.fetchTranscript(req.body.id);
   let text = "";
 
   for (let i = 0; i < lines.length; i++) {
