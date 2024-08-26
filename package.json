@@ -8,6 +8,7 @@
     "he": "^1.2.0",
     "lodash": "^4.17.21",
     "striptags": "^3.2.0",
-    "youtube-transcript": "^1.2.1"
+    "youtube-transcript": "^1.2.1",
+    "youtubei.js": "^10.3.0"
   }
 }
