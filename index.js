@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { YoutubeTranscript } from "youtube-transcript";
 import bodyParser from "body-parser";
+import { Innertube } from "youtubei.js/web";
 const app = express();
 const port = 3100;
 
@@ -10,17 +11,21 @@ const port = 3100;
 app.use(cors()); // Enable CORS
 app.use(bodyParser.json()); // Parse JSON request bodies
 
+const youtube = await Innertube.create({
+  lang: "en",
+  location: "US",
+  retrieve_player: false,
+});
+
 app.post("/", async (req, res) => {
-  let lines = await YoutubeTranscript.fetchTranscript(req.body.id);
-  let text = "";
+  const info = await youtube.getInfo(req.body.id);
+  const transcriptData = await info.getTranscript();
+  const text =
+    await transcriptData.transcript.content.body.initial_segments.map(
+      (segment) => segment.snippet.text
+    );
 
-  for (let i = 0; i < lines.length; i++) {
-    text += lines[i].text + " ";
-  }
-
-  // Remove /n from the text
-
-  res.send({ subtitles: text.replace(/\n/g, "") });
+  res.send({ text });
 });
 
 app.listen(port, () => {
