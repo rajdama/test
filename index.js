@@ -27,11 +27,22 @@ let youtube;
 
 app.post("/", async (req, res) => {
   try {
-    if (!req.body.id) {
-      return res.status(400).send({ error: "Video ID is required." });
+    const videoUrl = req.body.url;
+    if (!videoUrl) {
+      return res.status(400).send({ error: "Video URL is required." });
     }
 
-    const info = await youtube.getInfo(req.body.id);
+    // Extract the video ID from the URL
+    const videoId = new URL(videoUrl).searchParams.get("v");
+    if (!videoId) {
+      return res.status(400).send({ error: "Invalid Video URL." });
+    }
+
+    const info = await youtube.getInfo(videoId);
+
+    // Get the title of the video
+    const title = info.basic_info.title;
+
     const transcriptData = await info.getTranscript();
 
     // Fallback if transcript data is not available
@@ -52,7 +63,9 @@ app.post("/", async (req, res) => {
     );
 
     const text = lines.join(" ");
-    res.send({ text });
+
+    // Send the title and transcript text in the response
+    res.send({ title, text });
   } catch (error) {
     console.error("Error fetching transcript:", error);
 
