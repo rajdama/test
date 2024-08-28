@@ -37,11 +37,9 @@ app.post("/", async (req, res) => {
     if (!videoId) {
       return res.status(400).send({ error: "Invalid Video URL." });
     }
-
+    const titleInfo = await youtube.getBasicInfo(videoId);
+    let title = titleInfo.basic_info.title;
     const info = await youtube.getInfo(videoId);
-
-    // Get the title of the video
-    const title = info.basic_info.title;
 
     const transcriptData = await info.getTranscript();
 
@@ -65,8 +63,7 @@ app.post("/", async (req, res) => {
     const text = lines.join(" ");
 
     // Send the title and transcript text in the response
-    console.log(title)
-    res.send({ videoTitle:title, text:text });
+    res.send({ title, text });
   } catch (error) {
     console.error("Error fetching transcript:", error);
 
