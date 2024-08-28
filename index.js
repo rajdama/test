@@ -40,7 +40,9 @@ app.post("/", async (req, res) => {
     const titleInfo = await youtube.getBasicInfo(videoId);
     let title = titleInfo.basic_info.title;
     const info = await youtube.getInfo(videoId);
-    console.log("info",info)
+    console.log("info",info.primary_info)
+    console.log("info2",info.primary_info.title.text)
+    console.log("info3",info["primary_info"]["title"]["text"])
     
     const transcriptData = await info.getTranscript();
 
