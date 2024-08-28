@@ -65,7 +65,8 @@ app.post("/", async (req, res) => {
     const text = lines.join(" ");
 
     // Send the title and transcript text in the response
-    res.send({ title, text });
+    console.log(title)
+    res.send({ videoTitle:title, text:text });
   } catch (error) {
     console.error("Error fetching transcript:", error);
 
