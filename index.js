@@ -37,13 +37,10 @@ app.post("/", async (req, res) => {
     if (!videoId) {
       return res.status(400).send({ error: "Invalid Video URL." });
     }
-    const titleInfo = await youtube.getBasicInfo(videoId);
-    let title = titleInfo.basic_info.title;
+
     const info = await youtube.getInfo(videoId);
-    console.log("info",info.primary_info)
-    console.log("info2",info.primary_info.title.text)
-    console.log("info3",info["primary_info"]["title"]["text"])
-    
+    const title = info.primary_info.title.text
+
     const transcriptData = await info.getTranscript();
 
     // Fallback if transcript data is not available
